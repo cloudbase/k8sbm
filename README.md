@@ -1,4 +1,4 @@
-## Automated K8S cluster deployment
+## Agile Kubernetes deployments
 
 ### Purpose
 
