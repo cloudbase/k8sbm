@@ -11,7 +11,7 @@ spec:
   source:
     path: config/management/cluster
     repoURL: git@github.com:cloudbase/BMK.git
-    targetRevision: flatcar_sysext
+    targetRevision: cncf_tm_baremetal_kvm
   ignoreDifferences:
   - group: infrastructure.cluster.x-k8s.io
     kind: TinkerbellCluster

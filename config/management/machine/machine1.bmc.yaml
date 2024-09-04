@@ -1,11 +1,11 @@
 apiVersion: bmc.tinkerbell.org/v1alpha1
 kind: Machine
 metadata:
-  name: sut01-altra
+  name: machine1
   namespace: tink-system
 spec:
   connection:
-    host: 10.8.0.231
+    host: 192.168.56.1
     port: 623
     authSecretRef:
       name: bm-auth-altra

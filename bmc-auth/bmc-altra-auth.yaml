@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: bm-auth-altra
+  namespace: tink-system
+data:
+  # admin/admin
+  username: YWRtaW4=
+  password: YWRtaW4=
+type: kubernetes.io/basic-auth

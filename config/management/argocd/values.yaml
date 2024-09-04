@@ -1,10 +1,11 @@
 global:
+  domain: argo-cd-virtual.mgmt.kub-poc.local
   hostAliases:
-    - ip: 10.8.10.133
+    - ip: 192.168.56.133
       hostnames:
-        - argo-cd.mgmt.kub-poc.local
-        - grafana.mgmt.kub-poc.local
-        - prometheus.mgmt.kub-poc.local
+        - argo-cd-virtual.mgmt.kub-poc.local
+        - grafana-virtual.mgmt.kub-poc.local
+        - prometheus-virtual.mgmt.kub-poc.local
 server:
   ingress:
     enabled: true
@@ -15,10 +16,10 @@ server:
       nginx.ingress.kubernetes.io/backend-protocol: HTTPS
       cert-manager.io/issuer: kub-poc-issuer
     hosts:
-      - argo-cd.mgmt.kub-poc.local
+      - argo-cd-virtual.mgmt.kub-poc.local
     tls:
       - hosts:
-          - argo-cd.mgmt.kub-poc.local
+          - argo-cd-virtual.mgmt.kub-poc.local
         secretName: argocd-server-tls
     https: true
 configs:
@@ -26,6 +27,6 @@ configs:
     server.insecure: 'false'
   cm:
     ui.cssurl: https://marius.oprin.ro/cbsl-branding/CBSL-style.css
-    url: https://argo-cd.mgmt.kub-poc.local
+    url: https://argo-cd-virtual.mgmt.kub-poc.local
   notifications:
-    argocdUrl: https://argo-cd.mgmt.kub-poc.local
+    argocdUrl: https://argo-cd-virtual.mgmt.kub-poc.local

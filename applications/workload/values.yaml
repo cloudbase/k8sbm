@@ -12,7 +12,7 @@ wordpress:
 cilium:
   name: cilium-kub-poc
   namespace: kube-system
-  version: 1.14.4
+  version: 1.15.4
   values:
     l2announcements:
       enabled: true
@@ -26,6 +26,9 @@ cilium:
         - 172.26.0.0/16
     operator:
       replicas: 1
+    leaseDuration: 300s
+    leaseRenewDeadline: 60s
+    leaseRetryPeriod: 10s
 prometheuswork:
   name: prometheus-workload
   namespace: monitoring
@@ -53,7 +56,7 @@ prometheuswork:
 operator:
   name: rook-ceph-operator
   namespace: rook-ceph
-  version: 1.12.5
+  version: 1.13.5
   values:
     # Default values for rook-ceph-operator
     # This is a YAML-formatted file.
@@ -63,7 +66,7 @@ operator:
       repository: rook/ceph
       # -- Image tag
       # @default -- `master`
-      tag: master
+      tag: v1.13.5
       # -- Image pull policy
       pullPolicy: IfNotPresent
 
@@ -661,7 +664,7 @@ operator:
 cluster:
   name: rook-ceph-cluster
   namespace: rook-ceph
-  version: 1.12.5
+  version: 1.13.5
   values:
     # Default values for a single rook-ceph cluster
     # This is a YAML-formatted file.
@@ -779,7 +782,7 @@ cluster:
       mon:
         # Set the number of mons to be started. Generally recommended to be 3.
         # For highest availability, an odd number of mons should be specified.
-        count: 3
+        count: 1
         # The mons should be on unique nodes. For production, at least 3 nodes are recommended for this reason.
         # Mons should only be allowed on the same node for test environments where data loss is acceptable.
         allowMultiplePerNode: true
@@ -788,8 +791,8 @@ cluster:
         # When higher availability of the mgr is needed, increase the count to 2.
         # In that case, one mgr will be active and one in standby. When Ceph updates which
         # mgr is active, Rook will update the mgr services to match the active mgr.
-        count: 2
-        allowMultiplePerNode: false
+        count: 1
+        allowMultiplePerNode: true
         modules:
           # Several modules should not need to be included in this list. The "dashboard" and "monitoring" modules
           # are already enabled by other settings in the cluster CR.
@@ -1007,7 +1010,7 @@ cluster:
       storage: # cluster level storage configuration and selection
         useAllNodes: true
         useAllDevices: true
-        devicePathFilter: "/dev/disk/by-id/nvme-INTEL.*"
+        devicePathFilter: "/dev/vdb"
         onlyApplyOSDPlacement: false
         # deviceFilter:
         # config:
@@ -1206,9 +1209,9 @@ cluster:
     # -- Settings for the filesystem snapshot class
     # @default -- See [CephFS Snapshots](../Storage-Configuration/Ceph-CSI/ceph-csi-snapshot.md#cephfs-snapshots)
     cephFileSystemVolumeSnapshotClass:
-      enabled: false
+      enabled: true
       name: ceph-filesystem
-      isDefault: true
+      isDefault: false
       deletionPolicy: Delete
       annotations: {}
       labels: {}
@@ -1218,9 +1221,9 @@ cluster:
     # -- Settings for the block pool snapshot class
     # @default -- See [RBD Snapshots](../Storage-Configuration/Ceph-CSI/ceph-csi-snapshot.md#rbd-snapshots)
     cephBlockPoolsVolumeSnapshotClass:
-      enabled: false
+      enabled: true
       name: ceph-block
-      isDefault: false
+      isDefault: true
       deletionPolicy: Delete
       annotations: {}
       labels: {}

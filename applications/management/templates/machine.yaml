@@ -15,4 +15,4 @@ spec:
   source:
     path: config/management/machine
     repoURL: git@github.com:cloudbase/BMK.git
-    targetRevision: flatcar_sysext
+    targetRevision: cncf_tm_baremetal_kvm

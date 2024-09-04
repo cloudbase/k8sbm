@@ -1,70 +1,46 @@
-apiVersion: kubevirt.io/v1alpha3
-kind: VirtualMachine
+apiVersion: v1
+kind: Service
 metadata:
- labels:
-   app: vm-example
-   vm.kubevirt.io/template: fedora-server-tiny-v0.11.3
-   vm.kubevirt.io/template.revision: '1'
-   vm.kubevirt.io/template.version: v0.11.3
-   os.template.kubevirt.io/fedora32: 'true'
-   flavor.template.kubevirt.io/tiny: 'true'
-   workload.template.kubevirt.io/server: 'true'
-   vm.kubevirt.io/template.namespace: openshift
- name: vm-example
- namespace: default
- annotations:
-   name.os.template.kubevirt.io/fedora32: Fedora 31 or higher
-   description: VM example
+  name: fedora-public-ip
+  labels:
+    app.kubernetes.io/advertise: "true"
 spec:
- running: true
- template:
-   metadata:
-     labels:
-       kubevirt.io/domain: vm-example
-       kubevirt.io/size: tiny
-       vm.kubevirt.io/name: vm-example
-       os.template.kubevirt.io/fedora32: 'true'
-       flavor.template.kubevirt.io/tiny: 'true'
-       workload.template.kubevirt.io/server: 'true'
-   spec:
-     domain:
-       cpu:
-         cores: 1
-         sockets: 1
-         threads: 1
-       devices:
-         disks:
-           - bootOrder: 1
-             disk:
-               bus: virtio
-             name: containerdisk
-           - disk:
-               bus: virtio
-             name: cloudinitdisk
-         interfaces:
-           - masquerade: {}
-             model: virtio
-             name: default
-         networkInterfaceMultiqueue: true
-         rng: {}
-       machine:
-         type: ""
-       resources:
-         requests:
-           memory: 1Gi
-     #evictionStrategy: LiveMigrate
-     hostname: vm-example
-     networks:
-       - name: default
-         pod: {}
-     terminationGracePeriodSeconds: 180
-     volumes:
-       - containerDisk:
-           image: quay.io/kubevirt/fedora-cloud-container-disk-demo:20210811_9fec1f849-arm64
-         name: containerdisk
-       - cloudInitNoCloud:
-           userData: |-
-             #cloud-config
-             password: fedora
-             chpasswd: { expire: False }
-         name: cloudinitdisk
+  ports:
+  - port: 22
+    targetPort: 22
+  selector:
+    special: fedora-vm
+  type: LoadBalancer
+  externalTrafficPolicy: Cluster
+  allocateLoadBalancerNodePorts: true
+  internalTrafficPolicy: Cluster
+---
+apiVersion: kubevirt.io/v1
+kind: VirtualMachineInstance
+metadata:
+  name: fedora-public-ip
+  labels:
+    special: fedora-vm
+spec:
+  domain:
+    devices:
+      disks:
+      - disk:
+          bus: virtio
+        name: containerdisk
+      - disk:
+          bus: virtio
+        name: cloudinitdisk
+    resources:
+      requests:
+        memory: 1Gi
+  volumes:
+  - name: containerdisk
+    containerDisk:
+      image: quay.io/kubevirt/fedora-cloud-container-disk-demo:20210811_9fec1f849
+  - cloudInitNoCloud:
+      userData: |-
+        #cloud-config
+        password: fedora
+        chpasswd: { expire: False }
+    name: cloudinitdisk

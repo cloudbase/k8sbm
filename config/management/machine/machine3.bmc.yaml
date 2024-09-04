@@ -1,0 +1,13 @@
+apiVersion: bmc.tinkerbell.org/v1alpha1
+kind: Machine
+metadata:
+  name: machine3
+  namespace: tink-system
+spec:
+  connection:
+    host: 192.168.56.1
+    port: 625
+    authSecretRef:
+      name: bm-auth-altra
+      namespace: tink-system
+    insecureTLS: true

@@ -6,7 +6,7 @@ metadata:
 spec:
   destination:
     namespace: nginx
-    server: https://10.8.10.151:6443
+    server: https://192.168.56.151:6443
   project: default
   syncPolicy:
     syncOptions:
@@ -14,4 +14,4 @@ spec:
   source:
     path: config/workload/nginx
     repoURL: git@github.com:cloudbase/BMK.git
-    targetRevision: flatcar_sysext
+    targetRevision: cncf_tm_baremetal_kvm

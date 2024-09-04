@@ -6,9 +6,9 @@ metadata:
 spec:
   destination:
     namespace: cdi
-    server: https://10.8.10.151:6443
+    server: https://192.168.56.151:6443
   project: default
   source:
     path: config/workload/cdi
     repoURL: git@github.com:cloudbase/BMK.git
-    targetRevision: flatcar_sysext
+    targetRevision: cncf_tm_baremetal_kvm

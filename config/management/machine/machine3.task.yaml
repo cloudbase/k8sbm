@@ -1,16 +1,12 @@
 apiVersion: bmc.tinkerbell.org/v1alpha1
 kind: Job
 metadata:
-  name: job-power-reset-sut02-altra
+  name: job-power-reset-machine3
   namespace: tink-system
 spec:
   machineRef:
-    name: sut02-altra
+    name: machine3
     namespace: tink-system
   tasks:
     - powerAction: "off"
-    - oneTimeBootDeviceAction:
-        device:
-          - "pxe"
-        efiBoot: true
     - powerAction: "on"
